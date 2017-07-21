@@ -1,6 +1,25 @@
 ---
-- include: cleanup.yml
-- include: install.yml
-- { include: configure.yml,  when: mariadb_server }
-- { include: logging.yml,    when: mariadb_server }
-- { include: backup.yml,     when: mariadb_server }
+#- include: install.yml
+#- { include: configure.yml,  when: mariadb_server }
+#- { include: logging.yml,    when: mariadb_server }
+#- { include: backup.yml,     when: mariadb_server }
+
+- name: Install software-properties-common package
+  become: yes
+  apt:
+    name: software-properties-common
+    state: present
+
+- name: Add MariaDB package repository
+  become: yes
+  apt_reporisoty:
+    repo: "deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.2/ubuntu {{ ansible_distribution_release }} main"
+    state: present
+
+- name: Install MariaDB
+  become: yes
+  apt:
+    name: mariadb-server
+    state: present
+    update_cache: yes
+
