@@ -1,20 +1,20 @@
 ---
-- name: service | mariadb | started
+- name: start mariadb
   service:
     name: mysql
     state: started
 
-- name: service | mariadb | stopped
+- name: stop mariadb
   service:
     name: mysql
     state: stopped
 
-- name: service | mariadb | restarted
+- name: restart mariadb
   service:
     name: mysql
     state: restarted
 
-- name: service | mariadb | reloaded
+- name: reload mariadb
   service:
     name: mysql
     state: reloaded

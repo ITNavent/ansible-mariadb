@@ -1,6 +1,58 @@
 ---
-- include: cleanup.yml
-- include: install.yml
-- { include: configure.yml,  when: mariadb_server }
-- { include: logging.yml,    when: mariadb_server }
-- { include: backup.yml,     when: mariadb_server }
+
+- name: Install software-properties-common package
+  become: yes
+  apt:
+    name: software-properties-common
+    state: present
+  tags: install
+
+- name: Install python-mysqldb package
+  become: yes
+  apt:
+    name: python-mysqldb
+    state: present
+  tags: install
+
+- name: Add apt-key
+  become: yes
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: C74CD1D8
+  tags: install
+
+- name: Add MariaDB package repository
+  become: yes
+  apt_repository:
+    repo: "deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.2/ubuntu {{ ansible_distribution_release }} main"
+    state: absent
+  tags: install
+
+- name: Install MariaDB
+  become: yes
+  apt:
+    name: mariadb-server
+    state: absent
+    update_cache: yes
+  register:
+    mariadb_installation_changed
+  tags: install
+
+- name: Create Database User
+  mysql_user:
+    state: present
+    name: "{{ database_username }}"
+    password: "{{ database_password | mandatory }}"
+    priv: "mysql.*:ALL"
+    host: "%"
+
+- name: Configure MariaDB
+  become: yes
+  template:
+    src: ../templates/my.cnf.j2
+    dest: /etc/mysql/my.cnf
+  register:
+    mariadb_configuration_changed
+  notify: restart mariadb
+  tags:
+    configure

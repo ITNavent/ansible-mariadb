@@ -1,0 +1,301 @@
+# MariaDB database server configuration file.
+#
+# You can copy this file to one of:
+# - "/etc/mysql/my.cnf" to set global options,
+# - "~/.my.cnf" to set user-specific options.
+#
+# One can use all long options that the program supports.
+# Run program with --help to get a list of available options and with
+# --print-defaults to see which it would actually understand and use.
+#
+# For explanations see
+# http://dev.mysql.com/doc/mysql/en/server-system-variables.html
+
+# This will be passed to all mysql clients
+# It has been reported that passwords should be enclosed with ticks/quotes
+# escpecially if they contain "#" chars...
+# Remember to edit /etc/mysql/debian.cnf when changing the socket location.
+[client]
+port		= {{ mariadb_client_port }}
+socket		= {{ mariadb_client_socket }}
+
+# Here is entries for some specific programs
+# The following values assume you have at least 32M ram
+
+# This was formally known as [safe_mysqld]. Both versions are currently parsed.
+[mysqld_safe]
+socket		= {{ mariadb_mysqld_safe_socket }}
+nice		= {{ mariadb_mysqld_safe_nice }}
+
+[mysqld]
+#
+# * Basic Settings
+#
+user		= {{ mariadb_mysqld_user }}
+pid-file	= {{ mariadb_mysqld_pid_file }}
+socket		= {{ mariadb_mysqld_socket }}
+port		= {{ mariadb_mysqld_port }}
+basedir		= {{ mariadb_mysqld_basedir }}
+datadir		= {{ mariadb_mysqld_datadir }}
+tmpdir		= {{ mariadb_mysqld_tmpdir }}
+lc_messages_dir	= {{ mariadb_mysqld_lc_messages_dir }}
+lc_messages	= {{ mariadb_mysqld_lc_messages }}
+
+{% if mariadb_mysqld_skip_external_locking == "yes" %}
+skip-external-locking
+{% endif %}
+
+#
+# Instead of skip-networking the default is now to listen only on
+# localhost which is more compatible and is not less secure.
+bind-address		= {{ mariadb_mysqld_bind_address }}
+#
+# * Fine Tuning
+#
+
+max_connections		= {{ mariadb_mysqld_max_connections }}
+connect_timeout		= {{ mariadb_mysqld_connect_timeout }}
+wait_timeout		= {{ mariadb_mysqld_wait_timeout }}
+max_allowed_packet	= {{ mariadb_mysqld_max_allowed_packet }}
+thread_cache_size       = {{ mariadb_mysqld_thread_cache_size }}
+sort_buffer_size	= {{ mariadb_mysqld_sort_buffer_size }}
+bulk_insert_buffer_size	= {{ mariadb_mysqld_bulk_insert_buffer_size }}
+tmp_table_size		= {{ mariadb_mysqld_tmp_table_size }}
+max_heap_table_size	= {{ mariadb_mysqld_max_heap_table_size }}
+
+#
+# * MyISAM
+#
+# This replaces the startup script and checks MyISAM tables if needed
+# the first time they are touched. On error, make copy and try a repair.
+
+myisam_recover_options = {{ mariadb_mysqld_myisam_recover_options }}
+key_buffer_size		= {{ mariadb_mysqld_key_buffer_size }}
+
+{% if mariadb_mysqld_open_files_limit > 0 %}
+open-files-limit = {{ mariadb_mysqld_open_files_limit }}
+{% endif %}
+
+table_open_cache	= {{ mariadb_mysqld_table_open_cache }}
+myisam_sort_buffer_size	= {{ mariadb_mysqld_myisam_sort_buffer_size }}
+concurrent_insert	= {{ mariadb_mysqld_concurrent_insert }}
+read_buffer_size	= {{ mariadb_mysqld_read_buffer_size }}
+read_rnd_buffer_size	= {{ mariadb_mysqld_read_rnd_buffer_size }}
+#
+# * Query Cache Configuration
+#
+# Cache only tiny result sets, so we can fit more in the query cache.
+query_cache_limit		= {{ mariadb_mysqld_query_cache_limit }}
+query_cache_size		= {{ mariadb_mysqld_query_cache_size }}
+# for more write intensive setups, set to DEMAND or OFF
+
+{% if mariadb_mysqld_query_cache_type %}
+query_cache_type = {{ mariadb_mysqld_query_cache_type }}
+{% endif %}
+
+#
+# * Logging and Replication
+#
+# Both location gets rotated by the cronjob.
+# Be aware that this log type is a performance killer.
+# As of 5.1 you can enable the log at runtime!
+{% if mariadb_mysqld_general_log_file %}
+general_log_file = {{ mariadb_mysqld_general_log_file }}
+{% endif %}
+
+{% if mariadb_mysqld_general_log %}
+general_log = {{ mariadb_mysqld_general_log }}
+{% endif %}
+
+#
+# Error logging goes to syslog due to /etc/mysql/conf.d/mysqld_safe_syslog.cnf.
+#
+# we do want to know about network errors and such
+log_warnings = {{ mariadb_mysqld_log_warnings }}
+#
+# Enable the slow query log to see queries with especially long duration
+slow_query_log = {{ mariadb_mysqld_slow_query_log }}
+slow_query_log_file	= {{ mariadb_mysqld_slow_query_log_file }}
+long_query_time = {{ mariadb_mysqld_long_query_time }}
+log_slow_rate_limit = {{ mariadb_mysqld_log_slow_rate_limit }}
+log_slow_verbosity = {{ mariadb_mysqld_log_slow_verbosity }}
+
+{% if mariadb_mysqld_log_queries_not_using_indexes == "yes" %}
+log-queries-not-using-indexes
+{% endif %}
+
+{% if mariadb_mysqld_log_slow_admin_statements == "yes" %}
+log-queries-not-log_slow_admin_statements-indexes
+{% endif %}
+
+#
+# The following can be used as easy to replay backup logs or for replication.
+# note: if you are setting up a replication slave, see README.Debian about
+#       other settings you may need to change.
+
+{% if mariadb_mysqld_server_id %}
+server-id = {{ mariadb_mysqld_server_id }}
+{% endif %}
+
+{% if mariadb_mysqld_report_host %}
+report_host = {{ mariadb_mysqld_report_host }}
+{% endif %}
+
+{% if mariadb_mysqld_auto_increment_increment %}
+auto_increment_increment = {{ mariadb_mysqld_auto_increment_increment }}
+{% endif %}
+
+{% if mariadb_mysqld_auto_increment_offset %}
+auto_increment_offset = {{ mariadb_mysqld_auto_increment_offset }}
+{% endif %}
+
+log_bin = {{ mariadb_mysqld_log_bin }}
+log_bin_index = {{ mariadb_mysqld_log_bin_index }}
+
+# not fab for performance, but safer
+{% if mariadb_mysqld_sync_binlog %}
+sync_binlog = {{ mariadb_mysqld_sync_binlog }}
+{% endif %}
+
+expire_logs_days = {{ mariadb_mysqld_expire_logs_days }}
+max_binlog_size = {{ mariadb_mysqld_max_binlog_size }}
+# slaves
+
+{% if mariadb_mysqld_relay_log %}
+relay_log = {{ mariadb_mysqld_relay_log }}
+{% endif %}
+
+{% if mariadb_mysqld_auto_increment_offset %}
+relay_log_index = {{ mariadb_mysqld_relay_log_index }}
+{% endif %}
+
+{% if mariadb_mysqld_auto_increment_offset %}
+relay_log_info_file = {{ mariadb_mysqld_relay_log_info_file }}
+{% endif %}
+
+{% if mariadb_mysqld_log_slave_updates %}
+log_slave_updates
+{% endif %}
+
+{% if mariadb_mysqld_read_only %}
+read_only
+{% endif %}
+
+#
+# If applications support it, this stricter sql_mode prevents some
+# mistakes like inserting invalid dates etc.
+
+{% if mariadb_mysqld_sql_mode %}
+sql_mode = {{ mariadb_mysqld_sql_mode }}
+{% endif %}
+
+#
+# * InnoDB
+#
+# InnoDB is enabled by default with a 10MB datafile in /var/lib/mysql/.
+# Read the manual for more InnoDB related options. There are many!
+default_storage_engine	= {{ mariadb_mysqld_default_storage_engine }}
+# you can't just change log file size, requires special procedure
+
+{% if mariadb_mysqld_innodb_log_file_size %}
+innodb_log_file_size = {{ mariadb_mysqld_innodb_log_file_size }}
+{% endif %}
+
+innodb_buffer_pool_size	= {{ mariadb_mysqld_innodb_buffer_pool_size}}
+innodb_log_buffer_size	= {{ mariadb_mysqld_innodb_log_buffer_size }}
+innodb_file_per_table	= {{ mariadb_mysqld_innodb_file_per_table }}
+innodb_open_files	= {{ mariadb_mysqld_innodb_open_files }}
+innodb_io_capacity	= {{ mariadb_mysqld_innodb_io_capacity }}
+innodb_flush_method	= {{ mariadb_mysqld_innodb_flush_method }}
+#
+# * Security Features
+#
+# Read the manual, too, if you want chroot!
+
+{% if mariadb_mysqld_chroot %}
+chroot = {{ mariadb_mysqld_chroot }}
+{% endif %}
+
+#
+# For generating SSL certificates I recommend the OpenSSL GUI "tinyca".
+#
+{% if mariadb_mysqld_ssl_ca %}
+ssl-ca = {{ mariadb_mysqld_ssl_ca }}
+{% endif %}
+
+{% if mariadb_mysqld_ssl_cert %}
+ssl-cert = {{ mariadb_mysqld_ssl_cert }}
+{% endif %}
+
+{% if mariadb_mysqld_ssl_key %}
+ssl-key = {{ mariadb_mysqld_ssl_key }}
+{% endif %}
+
+#
+# * Galera-related settings
+#
+[galera]
+# Mandatory settings
+
+{% if mariadb_galera_wsrep_on %}
+wsrep_on = {{ mariadb_galera_wsrep_on }}
+{% endif %}
+
+{% if mariadb_galera_wsrep_provider %}
+wsrep_provider = {{ mariadb_galera_wsrep_provider }}
+{% endif %}
+
+{% if mariadb_galera_wsrep_cluster_address %}
+wsrep_cluster_address = {{ mariadb_galera_wsrep_cluster_address }}
+{% endif %}
+
+{% if mariadb_galera_binlog_format %}
+binlog_format = {{ mariadb_galera_binlog_format }}
+{% endif %}
+
+{% if mariadb_galera_default_storage_engine %}
+default_storage_engine = {{ mariadb_galera_default_storage_engine }}
+{% endif %}
+
+{% if mariadb_galera_innodb_autoinc_lock_mode %}
+innodb_autoinc_lock_mode = {{ mariadb_galera_innodb_autoinc_lock_mode }}
+{% endif %}
+
+{% if mariadb_galera_bind_address %}
+bind-address = {{ mariadb_galera_bind_address }}
+{% endif %}
+
+{% if mariadb_galera_wsrep_slave_threads %}
+wsrep_slave_threads = {{ mariadb_galera_wsrep_slave_threads }}
+{% endif %}
+
+{% if mariadb_galera_innodb_flush_log_at_trx_commit %}
+innodb_flush_log_at_trx_commit = {{ mariadb_galera_innodb_flush_log_at_trx_commit }}
+{% endif %}
+
+
+
+[mysqldump]
+{% if mariadb_mysqldump_quick == "yes" %}
+quick
+{% endif %}
+
+{% if mariadb_mysqldump_quote_names == "yes" %}
+quote-names
+{% endif %}
+
+max_allowed_packet	= {{ mariadb_mysqldump_max_allowed_packet }}
+
+[mysql]
+{% if mariadb_mysql_no_auto_rehash == "yes" %}
+no-auto-rehash
+{% endif %}
+
+[isamchk]
+key_buffer = {{ mariadb_isamchk_key_buffer }}
+
+#
+# * IMPORTANT: Additional settings that can override those from this file!
+#   The files must end with '.cnf', otherwise they'll be ignored.
+#
+!includedir /etc/mysql/conf.d/
