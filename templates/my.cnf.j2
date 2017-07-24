@@ -41,7 +41,7 @@ tmpdir		= {{ mariadb_mysqld_tmpdir }}
 lc_messages_dir	= {{ mariadb_mysqld_lc_messages_dir }}
 lc_messages	= {{ mariadb_mysqld_lc_messages }}
 
-{% if mariadb_mysqld_skip_external_locking = "yes" %}
+{% if mariadb_mysqld_skip_external_locking == "yes" %}
 skip-external-locking
 {% endif %}
 
@@ -120,11 +120,11 @@ long_query_time = {{ mariadb_mysqld_long_query_time }}
 log_slow_rate_limit = {{ mariadb_mysqld_log_slow_rate_limit }}
 log_slow_verbosity = {{ mariadb_mysqld_log_slow_verbosity }}
 
-{% if mariadb_mysqld_log_queries_not_using_indexes = "yes" %}
+{% if mariadb_mysqld_log_queries_not_using_indexes == "yes" %}
 log-queries-not-using-indexes
 {% endif %}
 
-{% if mariadb_mysqld_log_slow_admin_statements = "yes" %}
+{% if mariadb_mysqld_log_slow_admin_statements == "yes" %}
 log-queries-not-log_slow_admin_statements-indexes
 {% endif %}
 
@@ -276,18 +276,18 @@ innodb_flush_log_at_trx_commit = {{ mariadb_galera_innodb_flush_log_at_trx_commi
 
 
 [mysqldump]
-{% if mariadb_mysqldump_quick = "yes" %}
+{% if mariadb_mysqldump_quick == "yes" %}
 quick
 {% endif %}
 
-{% if mariadb_mysqldump_quote_names = "yes" %}
+{% if mariadb_mysqldump_quote_names == "yes" %}
 quote-names
 {% endif %}
 
 max_allowed_packet	= {{ mariadb_mysqldump_max_allowed_packet }}
 
 [mysql]
-{% if mariadb_mysql_no_auto_rehash = "yes" %}
+{% if mariadb_mysql_no_auto_rehash == "yes" %}
 no-auto-rehash
 {% endif %}
 

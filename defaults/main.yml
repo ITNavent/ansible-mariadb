@@ -6,6 +6,9 @@ mariadb_client_socket: "/var/run/mysqld/mysqld.sock"
 mariadb_mysqld_safe_socket: "/var/run/mysqld/mysqld.sock"
 mariadb_mysqld_safe_nice: 0
 
+database_username: "root"
+database_password: "root"
+
 # Basic Settings
 mariadb_mysqld_user: "mysql"
 mariadb_mysqld_pid_file: "/var/run/mysqld/mysqld.pid"

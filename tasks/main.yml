@@ -7,6 +7,13 @@
     state: present
   tags: install
 
+- name: Install python-mysqldb package
+  become: yes
+  apt:
+    name: python-mysqldb
+    state: present
+  tags: install
+
 - name: Add apt-key
   become: yes
   apt_key:
@@ -30,6 +37,14 @@
   register:
     mariadb_installation_changed
   tags: install
+
+- name: Create Database User
+  mysql_user:
+    state: present
+    name: "{{ database_username }}"
+    password: "{{ database_password | mandatory }}"
+    priv: "mysql.*:ALL"
+    host: "%"
 
 - name: Configure MariaDB
   become: yes
