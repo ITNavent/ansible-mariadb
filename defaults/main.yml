@@ -1,22 +1,117 @@
 ---
-mariadb_user: mysql
-mariadb_group: mysql
 
-mariadb_server: no
-mariadb_client: "{{ mariadb_backup_enabled }}"
+mariadb_client_port: 3306
+mariadb_client_socket: "/var/run/mysqld/mysqld.sock"
 
-using_load_balancer: no
-mariadb_accepts_external_connections: yes
+mariadb_mysqld_safe_socket: "/var/run/mysqld/mysqld.sock"
+mariadb_mysqld_safe_nice: 0
 
-mariadb_runtime_root: "{{ runtime_root | default('/var/run') }}/mysql"
-mariadb_pidfile_path: "{{ mariadb_runtime_root }}/mysql.pid"
-mariadb_socket_path: "{{ mariadb_runtime_root }}/mysql.sock"
+# Basic Settings
+mariadb_mysqld_user: "mysql"
+mariadb_mysqld_pid_file: "/var/run/mysqld/mysqld.pid"
+mariadb_mysqld_socket: "/var/run/mysqld/mysqld.sock"
+mariadb_mysqld_port: "3306"
+mariadb_mysqld_basedir: "/usr"
+mariadb_mysqld_datadir: "/var/lib/mysql"
+mariadb_mysqld_tmpdir: "/tmp"
+mariadb_mysqld_lc_messages_dir: "/usr/share/mysql"
+mariadb_mysqld_lc_messages: "en_US"
+mariadb_mysqld_skip_external_locking: "yes"
 
-mariadb_log_root: "{{ log_root | default('/var/log') }}/mysql"
-mariadb_general_log_path: "{{ mariadb_log_root }}/general.log"
-mariadb_slow_query_log_path: "{{ mariadb_log_root }}/slow-query.log"
-mariadb_backup_enabled: no
-mariadb_backup_path: /data/backup/mariadb
-mariadb_backup_frequency: daily
+mariadb_mysqld_bind_address: "127.0.0.1"
 
-mariadb_modules: []
+# Fine Tuning
+mariadb_mysqld_max_connections: 100
+mariadb_mysqld_connect_timeout: 5
+mariadb_mysqld_wait_timeout: 600
+mariadb_mysqld_max_allowed_packet: "16M"
+mariadb_mysqld_thread_cache_size: 128
+mariadb_mysqld_sort_buffer_size: "4M"
+mariadb_mysqld_bulk_insert_buffer_size: "16M"
+mariadb_mysqld_tmp_table_size: "32M"
+mariadb_mysqld_max_heap_table_size:	"32M"
+
+# MyISAM
+mariadb_mysqld_myisam_recover_options: "BACKUP"
+mariadb_mysqld_key_buffer_size: "128M"
+mariadb_mysqld_open_files_limit: 0
+mariadb_mysqld_table_open_cache: 400
+mariadb_mysqld_myisam_sort_buffer_size: "512M"
+mariadb_mysqld_concurrent_insert: 2
+mariadb_mysqld_read_buffer_size: "2M"
+mariadb_mysqld_read_rnd_buffer_size: "1M"
+
+# Query Cache Configuration
+mariadb_mysqld_query_cache_limit: "128K"
+mariadb_mysqld_query_cache_size: "64M"
+mariadb_mysqld_query_cache_type: ""
+
+# Logging and Replication
+mariadb_mysqld_general_log_file: ""
+mariadb_mysqld_general_log: 0
+mariadb_mysqld_log_warnings: 2
+
+mariadb_mysqld_slow_query_log: 0
+mariadb_mysqld_slow_query_log_file:	"/var/log/mysql/mariadb-slow.log"
+mariadb_mysqld_long_query_time: 10
+mariadb_mysqld_log_slow_rate_limit: 1000
+mariadb_mysqld_log_slow_verbosity: "query_plan"
+
+mariadb_mysqld_log_queries_not_using_indexes: "no"
+mariadb_mysqld_log_slow_admin_statements: "no"
+
+mariadb_mysqld_server_id:
+mariadb_mysqld_report_host:
+mariadb_mysqld_auto_increment_increment:
+mariadb_mysqld_auto_increment_offset:
+mariadb_mysqld_log_bin: "/var/log/mysql/mariadb-bin"
+mariadb_mysqld_log_bin_index: "/var/log/mysql/mariadb-bin.index"
+
+mariadb_mysqld_sync_binlog:
+mariadb_mysqld_expire_logs_days: 10
+mariadb_mysqld_max_binlog_size: "100M"
+
+mariadb_mysqld_relay_log: ""
+mariadb_mysqld_relay_log_index: ""
+mariadb_mysqld_relay_log_info_file: ""
+mariadb_mysqld_log_slave_updates:
+mariadb_mysqld_read_only:
+mariadb_mysqld_sql_mode:
+
+# InnoDB
+mariadb_mysqld_default_storage_engine: "InnoDB"
+mariadb_mysqld_innodb_log_file_size: ""
+mariadb_mysqld_innodb_buffer_pool_size: "256M"
+mariadb_mysqld_innodb_log_buffer_size: "8M"
+mariadb_mysqld_innodb_file_per_table: 1
+mariadb_mysqld_innodb_open_files: 400
+mariadb_mysqld_innodb_io_capacity: 400
+mariadb_mysqld_innodb_flush_method: "O_DIRECT"
+
+# Security Features
+mariadb_mysqld_chroot: ""
+mariadb_mysqld_ssl_ca: ""
+mariadb_mysqld_ssl_cert: ""
+mariadb_mysqld_ssl_key: ""
+
+# Galera-related settings
+mariadb_galera_wsrep_on:
+mariadb_galera_wsrep_provider:
+mariadb_galera_wsrep_cluster_address:
+mariadb_galera_binlog_format:
+mariadb_galera_default_storage_engine:
+mariadb_galera_innodb_autoinc_lock_mode:
+mariadb_galera_bind_address:
+mariadb_galera_wsrep_slave_threads:
+mariadb_galera_innodb_flush_log_at_trx_commit:
+
+# Mysqldump
+mariadb_mysqldump_quick: "yes"
+mariadb_mysqldump_quote_names: "yes"
+mariadb_mysqldump_max_allowed_packet: "16M"
+
+# Mysql
+mariadb_mysql_no_auto_rehash: "no"
+
+# isamchk
+mariadb_isamchk_key_buffer: "16M"
