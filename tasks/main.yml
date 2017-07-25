@@ -43,7 +43,7 @@
     state: present
     name: "{{ database_username }}"
     password: "{{ database_password | mandatory }}"
-    priv: "mysql.*:ALL"
+    priv: "*.*:ALL"
     host: "%"
 
 - name: Configure MariaDB
