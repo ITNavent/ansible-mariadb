@@ -25,14 +25,14 @@
   become: yes
   apt_repository:
     repo: "deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.2/ubuntu {{ ansible_distribution_release }} main"
-    state: absent
+    state: present
   tags: install
 
 - name: Install MariaDB
   become: yes
   apt:
     name: mariadb-server
-    state: absent
+    state: present
     update_cache: yes
   register:
     mariadb_installation_changed
