@@ -32,7 +32,7 @@ mariadb_mysqld_thread_cache_size: 128
 mariadb_mysqld_sort_buffer_size: "4M"
 mariadb_mysqld_bulk_insert_buffer_size: "16M"
 mariadb_mysqld_tmp_table_size: "32M"
-mariadb_mysqld_max_heap_table_size:	"32M"
+mariadb_mysqld_max_heap_table_size: "32M"
 
 # MyISAM
 mariadb_mysqld_myisam_recover_options: "BACKUP"
@@ -55,7 +55,7 @@ mariadb_mysqld_general_log: 0
 mariadb_mysqld_log_warnings: 2
 
 mariadb_mysqld_slow_query_log: 0
-mariadb_mysqld_slow_query_log_file:	"/var/log/mysql/mariadb-slow.log"
+mariadb_mysqld_slow_query_log_file: "/var/log/mysql/mariadb-slow.log"
 mariadb_mysqld_long_query_time: 10
 mariadb_mysqld_log_slow_rate_limit: 1000
 mariadb_mysqld_log_slow_verbosity: "query_plan"
